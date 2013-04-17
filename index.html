@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<!--
+  Google HTML5 slide template
+
+  Authors: Luke Mahé (code)
+           Marcin Wichary (code and design)
+           
+           Dominic Mazzoni (browser compatibility)
+           Charles Chen (ChromeVox support)
+
+  URL: http://code.google.com/p/html5slides/
+-->
+
+<html>
+  <head>
+    <title>Why Python? —— From the perspective of an average level programmer</title>
+
+    <meta charset='utf-8'>
+    <script
+      src='./slides.js'></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  </head>
+  
+  <style>
+    /* Your individual styles here, or just use inline styles if that’s
+       what you want. */
+    
+    
+  </style>
+  
+
+  <body style='display: none'>
+
+    <section class='slides layout-regular template-default'>
+      
+      <!-- Your slides (<article>s) go here. Delete or comment out the
+           slides below. -->
+        
+        
+      
+      <article>
+        <h1 id="title1">
+          Why Python?
+        </h1>
+        <h1 id="title2" style="display:none">
+          Why Not Ruby?
+        </h1>
+        <h4>
+          From the perspective of an average level programmer
+        </h4>
+
+        <p>
+          Adieu
+          <br>
+          Apr 17, 2013
+        </p>
+      </article>
+
+      <article>
+          <h3>
+            About Me
+          </h3>
+          <p><img class="centered" src="images/adieu-pic.png" /></p>
+          <ul>
+            <li>
+              从2007年开始使用Python
+            </li>
+            <li>
+              主要使用Python + Django进行网站开发
+            </li>
+            <li>
+              平时也使用Python做点兴趣项目
+            </li>
+          </ul>
+      </article>
+      
+      <article>
+          <h1 class="centered">
+          Disclaimer
+          </h1>
+      </article>
+
+      <article>
+        <h3>
+          What an average level programmer want
+        </h3>
+        <ul class="build">
+          <li>
+            语法简单易学，容易上手
+          </li>
+          <li>
+            最好可以学一次，就可以用来解决所有的问题
+          </li>
+          <li>
+            资料丰富，遇到问题容易找到答案或者找到地方提问
+          </li>
+          <li>
+            Get Things Done!
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h1 class="centered">
+          Reason 1:<br/>
+          Easy and Beautiful</h1>
+      </article>
+      <article>
+        <h3>Language that can express our ideas</h3>
+        <section>
+        <pre class="lang-python">
+# Search directory tree for all duplicate files
+
+hashmap = {}
+
+for path, dirs, files in os.walk('.'):
+    for filename in files:
+      fullname = os.path.join(path, filename)
+      with open(fullname) as f:
+          d= f.read()
+      h = hashlib.md5(d).hexdigest()
+      filelist = hashmap.setdefault(h, [])
+      filelist.append(fullname)
+pprint.pprint(hashmap)
+</pre>
+        </section>
+        <div class='source'>
+          Source: https://speakerdeck.com/pyconslides/pycon-keynote-python-is-awesome-by-raymond-hettinger
+        </div>
+      </article>
+      <article class="smaller">
+        <h3>Language that can express our ideas</h3>
+        <section>
+        <pre class="lang-scm" style="font-size:10px;line-height:12px">
+(define cps
+  (lambda (exp)
+    (letrec
+        ([trivs '(zero? sub1)]
+         [id (lambda (v) v)]
+         [C~ (lambda (v) `(k ,v))]      ; tail context
+         [fv (let ((n -1))
+               (lambda ()
+                 (set! n (+ 1 n))
+                 (string->symbol (string-append "v" (number->string n)))))]
+         [cps1
+          (lambda (exp C)
+            (pmatch exp
+              [,x (guard (not (pair? x))) (C x)]
+              [(if ,test ,conseq ,alt)
+               (cps1 test
+                     (lambda (t)
+                       (if (memq C (list C~ id))
+                           `(if ,t ,(cps1 conseq C) ,(cps1 alt C))
+                           (let ((v* (fv)))
+                             `(let ((k (lambda (,v*) ,(C v*))))
+                                (if ,t ,(cps1 conseq C~) ,(cps1 alt C~)))))))]
+              [(lambda (,x) ,body)
+               (C `(lambda (,x k) ,(cps1 body C~)))]
+              [(,op ,a ,b)
+               (cps1 a (lambda (v1)
+                         (cps1 b (lambda (v2)
+                                   (C `(,op ,v1 ,v2))))))]
+              [(,rator ,rand)
+               (cps1 rator
+                     (lambda (r)
+                       (cps1 rand
+                             (lambda (d)
+                               (cond
+                                [(memq r trivs) (C `(,r ,d))]
+                                [(eq? C C~) `(,r ,d k)] ; tail call
+                                [else
+                                 (let ((v* (fv)))
+                                   `(,r ,d (lambda (,v*) ,(C v*))))])))))]))])
+      (cps1 exp id))))
+</pre>
+        </section>
+        <div class='source'>
+          Source: https://github.com/yinwang0/gems/blob/master/cps.ss
+        </div>
+      </article>
+      <article>
+        <h3>What Makes Python Awesome</h3>
+          <iframe width="640" height="360" src="http://www.youtube.com/embed/NfngrdLv9ZQ?feature=player_embedded" frameborder="0" allowfullscreen></iframe>
+        <div class='source'>
+          Source: http://www.pyvideo.org/video/1669/keynote-3
+        </div>
+      </article>
+      <article>
+        <h1 class="centered">
+          Reason 2:<br/>
+          Battery Included</h1>
+      </article>
+      <article>
+        <h3>3rd Party Packages</h3>
+        <p>
+          <img class="centered" src='images/pypi.png'>
+        </p>
+        <div class='source'>
+          Source: https://pypi.python.org/pypi
+        </div>
+      </article>
+      <article>
+        <h3>Computer Vision</h3>
+          <iframe width="640" height="360" src="http://www.youtube.com/embed/UZSm7Q2bZoc?feature=player_embedded#t=398s" frameborder="0" allowfullscreen></iframe>
+        <div class='source'>
+          Source: http://www.pyvideo.org/video/1796/simplecv-computer-vision-using-python
+        </div>
+      </article>
+      <article>
+        <h3>Machine Learning</h3>
+          <iframe width="640" height="360" src="http://www.youtube.com/embed/__s45TTXxps?feature=player_detailpage#t=1264s" frameborder="0" allowfullscreen></iframe>
+        <div class='source'>
+          Source: http://www.pyvideo.org/video/636/practical-machine-learning-in-python
+        </div>
+      </article>
+      <article>
+        <h1 class="centered">
+          Reason 3:<br/>
+          Trends</h1>
+      </article>
+      <article>
+        <h3>Language Trends</h3>
+        <p>
+          <img class="centered" src='images/tpci_trends.png'>
+        </p>
+        <div class='source'>
+          Source: http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html
+        </div>
+      </article>
+      <article>
+        <h3>Job Trends</h3>
+        <p>
+          <img class="centered" src='images/job-trends.png'>
+        </p>
+        <div class='source'>
+          Source: http://www.indeed.com/jobanalytics/jobtrends
+        </div>
+      </article>
+        <article class="fill">
+            <h2 class="white">
+              One more thing...
+            </h2>
+            <p>
+              <img src='images/steve-jobs1.jpg' alt="One More Thing"/>
+            </p>
+        </article>
+      <article>
+        <h1 class="centered">
+          What about Ruby?
+        </h1>
+      </article>
+
+      <article>
+        <h3>
+          Conclusion
+        </h3>
+        <ul class="build">
+          <li>
+            简洁易懂的语法让程序开发变得轻松自然
+          </li>
+          <li>
+            种类丰富功能强大的第三方库让工作变得简单高效
+          </li>
+          <li>
+            活跃的用户社区以及企业的大规模使用带来光明的前景
+          </li>
+          <li>
+            以上就是作为中等水平程序员的我选择Python的理由
+          </li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>
+          谢谢
+        </h3>
+        <p>相关链接</p>
+        <ul>
+          <li>
+            <a href='http://www.pyvideo.org/video/1669/keynote-3'>What Makes Python Awesome</a>
+          </li>
+          <li>
+            <a href='http://www.pyvideo.org/video/1796/simplecv-computer-vision-using-python'>SimpleCV - Computer Vision using Python</a>
+          </li>
+          <li>
+            <a href='http://www.pyvideo.org/video/636/practical-machine-learning-in-python'>Practical Machine Learning in Python</a>
+          </li>
+        </ul>
+        <p>Slides地址</p>
+        <ul>
+            <li><a href='http://adieu.github.io/gdg0417-slides/'>http://adieu.github.io/gdg0417-slides/</a></li>
+        </ul>
+      </article>
+
+    </section>
+
+  </body>
+  <script type="text/javascript">
+    $(function(){
+        $("#title1").click(function(){
+          $("#title1").hide();
+          $("#title2").show();
+        });
+    })
+  </script>
+</html>
